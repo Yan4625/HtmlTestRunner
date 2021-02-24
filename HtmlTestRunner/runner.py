@@ -13,16 +13,17 @@ class HTMLTestRunner(TextTestRunner):
 
     time_format = "%Y-%m-%d_%H-%M-%S"
 
-    def __init__(self, output="./reports/", verbosity=2, stream=sys.stderr,
+    def __init__(self, output="./reports/", verbosity=2, catchbreak=True, stream=sys.stderr,
                  descriptions=True, failfast=False, buffer=False,
                  report_title=None, report_name=None, template=None, resultclass=None,
                  add_timestamp=True, open_in_browser=False,
                  combine_reports=False, template_args=None):
         self.verbosity = verbosity
+        self.catchbreak = catchbreak
         self.output = output
         self.encoding = UTF8
 
-        TextTestRunner.__init__(self, stream, descriptions, verbosity,
+        TextTestRunner.__init__(self, stream, descriptions, verbosity, catchbreak, 
                                 failfast=failfast, buffer=buffer)
 
         if add_timestamp:
@@ -52,7 +53,7 @@ class HTMLTestRunner(TextTestRunner):
     def _make_result(self):
         """ Create a TestResult object which will be used to store
         information about the executed tests. """
-        return self.resultclass(self.stream, self.descriptions, self.verbosity)
+        return self.resultclass(self.stream, self.descriptions, self.verbosity, self.catchbreak)
 
     def run(self, test):
         """ Runs the given testcase or testsuite. """
